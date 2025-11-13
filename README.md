@@ -3,7 +3,7 @@
 ## Bibliotheks-Chatbot der Hochschule - RAG-basiertes Frage-Antwort-System
 ----------------------------------------------------------------------------------------
   Dieses Projekt implementiert einen Chatbot für die Hochschulbibliothek.
-  Der Chatbot verwendet ein "Retrieval-Augmented Generation(RAG)"-System, um zuverlässige faktenbasierte Antworten zu liefern- basierend auf ofiziellen Dokumenten.
+  Der Chatbot verwendet ein "Retrieval-Augmented Generation(RAG)"-System, um zuverlässige faktenbasierte Antworten zu liefern- basierend auf offiziellen Dokumenten.
   
 ----------------------------------------------------------------------------------------
 ## Features
