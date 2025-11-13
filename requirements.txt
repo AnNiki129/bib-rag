@@ -5,7 +5,4 @@ langchain
 langchain-community
 chromadb
 sentence-transformers
-pymupdf
-beautifulsoup4
-lxml
 python-dotenv
