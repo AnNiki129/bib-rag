@@ -94,6 +94,7 @@ def main():
             continue
 
         chunks = chunk_text(text, max_chars=1200, overlap=200)
+        print(f"📄 Verarbeite {file.name}, erzeugte Chunks: {len(chunks)}")
         if not chunks:
             print(f"⚠️  Keine Chunks erzeugt für: {file.name}, überspringe.")
             continue
