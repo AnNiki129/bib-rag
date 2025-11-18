@@ -8,12 +8,12 @@ from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunct
 CHROMA_DIR = "chroma_bib"
 COLLECTION_NAME = "bib"
 
-#🗝️ API-Key aus Umgebungsvariable lesen 
-#API_KEY = os.getenv("LLM_API_KEY")
+ 🗝️ API-Key aus Umgebungsvariable lesen 
+API_KEY = os.getenv("LLM_API_KEY")
 
 # 🔁 Werte an Provider anpassen
-API_URL = "http://localhost:11434/api/chat"  # Beispiel-Endpunkt
-MODEL_NAME = "llama3"  # z.B. SauerkrautLM / Llama 3.1 70B Instruct/llama3
+API_URL = ""  # Beispiel-Endpunkt
+MODEL_NAME = ""  # z.B. SauerkrautLM / Llama 3.1 70B Instruct/llama3
 
 
 def load_collection():
@@ -50,7 +50,9 @@ def retrieve_context(collection, question: str, k: int = 4):
 
 
 def call_llm(question: str, context: str) -> str:
-    """Ruft das lokale LLM über Ollama auf."""
+    """Ruft das LLM (z. B. SauerkrautLM / Llama) über eine Chat-API auf."""
+    if not API_KEY:
+       return "⚠️ Kein API-Key gesetzt. Bitte LLM_API_KEY als Umgebungsvariable setzen."
 
     system_prompt = textwrap.dedent("""
         Du bist ein Bibliotheksassistent an einer Hochschule.
@@ -73,8 +75,8 @@ def call_llm(question: str, context: str) -> str:
     z.B.: Quellen: [1], [3]
     """
 
-    # Für Ollama kein API-Key nötig
     headers = {
+        "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json",
     }
 
@@ -84,17 +86,14 @@ def call_llm(question: str, context: str) -> str:
             {"role": "system", "content": system_prompt.strip()},
             {"role": "user", "content": user_prompt.strip()},
         ],
-        # Wichtig: kein Streaming, sonst kommen mehrere JSON-Objekte
-        "stream": False,
+        "temperature": 0.2,
+        "max_tokens": 400,
     }
 
-    resp = requests.post(API_URL, headers=headers, json=body, timeout=120)
+    resp = requests.post(API_URL, headers=headers, json=body, timeout=60)
     resp.raise_for_status()
     data = resp.json()
-
-    # Ollama-Format: Antwort steckt in data["message"]["content"]
-    return data["message"]["content"]
-
+    return data["choices"][0]["message"]["content"]
 
 
 def main():
