@@ -148,11 +148,21 @@ def call_llm(question: str, context: str) -> str:
         - Do not invent information.
 
         Links (if relevant):
-        - [English link title]: URL
+         -   eMedien: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/emedien
+
+        -   Online-Catalog: https://hbz-hkl.primo.exlibrisgroup.com/discovery/search?vid=49HBZ_HKL:VU1
+
+        -   interlibrary loan: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/fernleihe
+
+        -   Opening hours-Kaiserlautern: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-kaiserslautern
+
+        -   Opening hours-Zweibrücken: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-zweibruecken
+
+        -   Opening hours-Pirmasens: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-pirmasens
 
         Sources:
         - e.g. Sources: [1], [3]
-        """
+        """ 
 
     else:
         # ✅ DEUTSCHE ANTWORT
@@ -193,7 +203,18 @@ def call_llm(question: str, context: str) -> str:
         - Keine erfundenen Informationen.
 
         Links (falls sinnvoll):
-        - [Linktitel]: URL
+        -   eMedien: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/emedien
+
+        -   Online-Catalog: https://hbz-hkl.primo.exlibrisgroup.com/discovery/search?vid=49HBZ_HKL:VU1
+
+        -   Fernleihe: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/fernleihe
+
+        -   Öffnungszeiten-Standort-Kaiserlautern: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-kaiserslautern
+
+        -   Öffnungszeiten-Standort-Zweibrücken: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-zweibruecken
+
+        -   Öffnungszeiten-Standort-Pirmasens: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-pirmasens
+
 
         Quellen:
         - z.B.: Quellen: [1], [3]
