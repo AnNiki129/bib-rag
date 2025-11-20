@@ -15,14 +15,6 @@
   Zeitraum: 6 Wochen
   Technologien: Python 3.12.6, Streamlit, RAG(Retrieval-Augmented Generation),ChromaDB,Ollama,PDF-Parsing,Git
   
-----------------------------------------------------------------------------------------
-## Features
-
-  - beantwortet bibliotheksbezogene Fragen ( Öffnungszeiten, Ausleihe, Gebühren usw.)
-  - testaufbau vom RAG-System mit Chroma als Vektordatenbank
-  - Automatischer Import von PDF-Dokumenten
-  - Chnunking der Texte und Embedding durch "Sentence-transformers"
-  - Anbindung eines LLMs für die Vollversion (Llama 3.1 Sauerkraut) für den Prototypen genutztes LLM(Ollama)
 -----------------------------------------------------------------------------------------
 ## Systemarchitektur
 
@@ -32,16 +24,16 @@ Alle relevanten Bibliotheksinformationen wurden gesammelt und in PDF-Form bereit
 - Ausleihregeln
 - Bankverbindung
 - Standordinformationen
------------------------------------------------------------------------------------------
-## Extraktion & Chunking
+
+ # Extraktion & Chunking
 Mit Python und pydf wird aus jeder PDF der Text extrahiert.
 Der Chunking-Algorithmus zerlegt die Abschnitte in sinnvolle kleine, semantische Abschnitte die 
 - ca 1000-1.200 Zeichen pro Chunk groß sind und
 - 200 Zeichen überlappung (Overlaps)
 damit ist sichergestellt, dass keine Sätze abgeschnitten werden und der Zusammenhang versntanden wird.
 
------------------------------------------------------------------------------------------
-## Speicherung in ChromaDB
+
+# Speicherung in ChromaDB
 
 Die textlichen Chunks werden in einer lokalen ChromaDB gespeichert
 ```
@@ -53,8 +45,8 @@ Jeder Chunk ist gespeichert mit:
 - PDF-Quelle
 - Dateiname
 - Embedding
------------------------------------------------------------------------------------------
-## Kontextsuche
+
+ # Kontextsuche
 
 Bei jeder Nutzerfrage passiert:
 1. Frage wird analysiert -> Thema erkannt(Ausleihe, Öffnungzeiten, ...)
@@ -62,8 +54,8 @@ Bei jeder Nutzerfrage passiert:
 3. Bei bedarf werden die Chunks gefiltert
 4. Nur relevente Textstellen gehen an das LLM
 
------------------------------------------------------------------------------------------
-## LLM-Beantwortung
+
+# LLM-Beantwortung
 im folgenden Beispiel wird noch für den Prototypen Ollama als LLM benutz. Später sollte es 
 durch ```Llama 3.1 SauerkrautLM 70B Instruct``` abgelöst werden.
 
@@ -75,15 +67,16 @@ Das Modell bekommt einen präzisen System-Promt um zu vermeiden dass,
 - oder antworten unstrukturiert erzeugt werden
 Bei englischen/deutschen Fragen antwortet es der Sprache entsprechend.
 
------------------------------------------------------------------------------------------
-## Web-GUI mit Streamlit(für Prototypen)
+# Web-GUI mit Streamlit(für Prototypen)
 
 Streamlit bietet eine einfache Weboberfläche:
 - Eingabefeld für die Fragen
 - Ausgabe aus dem LLM
 - RAG-Kontext und Quellen(intern)
-- läuft über ```Terminal
-                streamlit run app.py ```
+- läuft über den Aufruf  ```streamlit run app.py ```
+
+-----------------------------------------------------------------------------------------
+## Fun
 
   
 
