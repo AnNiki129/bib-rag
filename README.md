@@ -45,7 +45,8 @@ damit ist sichergestellt, dass keine Sätze abgeschnitten werden und der Zusamme
 
 Die textlichen Chunks werden in einer lokalen ChromaDB gespeichert
 /chroma_bib
-  -> Collection "bib"
+    → Collection "bib"
+
 
   
 
