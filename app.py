@@ -11,7 +11,7 @@ def get_collection():
 
 def main():
     st.title("📚 Bibliotheks-Chatbot")
-    st.write("Stelle hier deine Fragen zur Bibliothek (Ausleihe, Öffnungszeiten, Gebühren, ...).")
+    st.write("Stelle hier deine Fragen zur Bibliothek.")
 
     # Chat-Verlauf initialisieren
     if "messages" not in st.session_state:
