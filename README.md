@@ -170,13 +170,13 @@ Falls Repo bereits existiert:
       
   Falls Scripts gesperrt:
   
- - ```bash
+ -     ```bash
        Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
   dann zu Schritt 2.
   
 # 4. Abhängigkeiten installieren
    
- - ```bash
+ -     ```bash
        pip install -r requirements.txt```
  
 # 5. Daten vorbereiten
@@ -222,19 +222,21 @@ Falls Repo bereits existiert:
 # 8. LLM-Modell laden
   Beispiel: Llama 3.1
   
- - ```bash
+ -     ```bash
        ollama pull llama3.1:70b```
   Modelle anzeigen: 
   
- - ```bash
+ -     ```bash
        ollama list```
  
 # 9. Backend testen
   Testen, ob der RAG funktioniert
- - ```python test_rag.py```
+ - ```bash
+       python test_rag.py```
    
   Testen, ob der Chat funktioniert
- - ```python chat.py```
+ - ```bash
+       python chat.py```
  
 # 10. Streamlit starten
   Starte den Web-Chatbot:
@@ -242,22 +244,23 @@ Falls Repo bereits existiert:
      streamlit run app.py```
 
   Browser öffnet automatisch:
- - ```http://localhost:```
+ - ```bash
+       http://localhost:```
 
-Dort kann man dann Fragen eingeben wie;
- -  Wie viele Medien darf ich ausleihen?
+ Dort kann man dann Fragen eingeben wie;
+-  Wie viele Medien darf ich ausleihen?
  
 # Troubleshooting
-   Fehler " Cannot be loaded because running scripts is disabled"
+  - Fehler " Cannot be loaded because running scripts is disabled"
     - ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
       
-   Fehler: Modul „chromadb“ fehlt
+  - Fehler: Modul „chromadb“ fehlt
     - ``` pip install chromadb ```
       
-   Fehler bei pyarrow
+  - Fehler bei pyarrow
     - ``` andere python version installieren```
   
-   Index wird nicht aktualisiert
+  - Index wird nicht aktualisiert
     -> Ordner löschen
       - ```chroma_bib/```
     -> Dann:
