@@ -12,6 +12,7 @@
   - Online-Katalog/Recherche
   - allgemeine Bibliotheksnutzung
  Der Chatbot soll später in die Hochschulwebseite eingebunden werden, um die Bibliothek für Studierende moderner und      zugänglicher zu machen.
+Außerdem eine erstellte Anleitung für das Bibliothekspersonal um den Prototypen anzulernen und selbst verwalten.
   Zeitraum: 6 Wochen
   Technologien: Python 3.12.6, Streamlit, RAG(Retrieval-Augmented Generation),ChromaDB,Ollama,PDF-Parsing,Git
   
@@ -127,10 +128,70 @@ Streamlit bietet eine einfache Weboberfläche:
 ├── requirements.txt      # Abhängigkeiten
 └── README.md             # Projektdokumentation
 ```
+ -----------------------------------------------------------------------------------------
 
 
+## Installation & Setup
 
+1. Python installieren
+   
+  - Python 3.10 oder 3.11 von https://www.python.org/downloads/ herunterladen.
+  - „Add Python to PATH“ aktivieren.
+  - Installation prüfen:
+    ```python --version```
+  - pip aktualisieren:
+    ```python -m pip install --upgrade pip ```
+    
+2. Projekt herunterladen
+   
+```git clone https://github.com/DEIN-USERNAME/bib-rag.git```
+```cd bib-rag```
+```git pull```
 
+4. Virtuelle Umgebung (.venv)
+   
+  ```python -m venv .venv```
+  ```.\.venv\Scripts\activate```
+ 
+  Falls Scripts gesperrt:
+  
+  ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
+  
+6. Abhängigkeiten installieren
+   
+ ```pip install -r requirements.txt```
+ 
+8. Daten vorbereiten
+
+ ```/data Ordner enthält alle Bibliotheks-PDFs.```
+ 
+10. RAG-Index bauen
+    
+ ```python index.py```
+ 
+12. Ollama installieren
+    
+ ```https://ollama.com/download```
+ 
+14. LLM-Modell laden
+    
+ ```ollama pull llama3.1:70b```
+ ```ollama list```
+ 
+16. Backend testen
+    
+ ```python test_rag.py```
+ ```python chat.py```
+ 
+18. Streamlit starten
+    
+ ```streamlit run app.py```
+ ```http://localhost:```
+ 
+Troubleshooting
+- Scripts disabled ® Set-ExecutionPolicy …
+- chromadb fehlt ® pip install chromadb
+- pyarrow Fehler ® Python-Version prüfen
 
 
 
