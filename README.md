@@ -141,52 +141,52 @@ Streamlit bietet eine einfache Weboberfläche:
   - Installation prüfen:
     Öffne dein Terminal-> Suchleiste -> gib ein ```cmd```:
 ``` bash
-        python --version
+python --version
 ```
    pip aktualisieren:
 
 ``` bash
-        python -m pip install --upgrade pip 
+python -m pip install --upgrade pip 
 ```    
 # 2. Projekt herunterladen
 
 ```bash
-     git clone https://github.com/AnNiki129/bib-rag.git
+git clone https://github.com/AnNiki129/bib-rag.git
 ```
 ``` bash
-     cd bib-rag
+cd bib-rag
 ```
 Falls Repo bereits existiert:
- ``` bash
-     git pull
+``` bash
+git pull
 ```
 # 3. Virtuelle Umgebung (.venv)
 Schritt 1- Erstellen
- ```bash
- python -m venv .venv
- ```
+```bash
+python -m venv .venv
+```
 Schritt 2- Aktivieren(mit Windows Powershell)
- ```bash
-     .\.venv\Scripts\activate
- ```
+```bash
+.\.venv\Scripts\activate
+```
  Erkennbar an:
- ```bash
-     (.venv) C:/Users/...
- ```   
+```bash
+(.venv) C:/Users/...
+```   
  Falls Scripts gesperrt:
- ```bash
-    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
- ```
+```bash
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
   dann zu Schritt 2.
   
 # 4. Abhängigkeiten installieren
    
- ```bash
-   pip install -r requirements.txt
- ```
+```bash
+pip install -r requirements.txt
+```
 # 5. Daten vorbereiten
  Alle offiziellen Bibliotheks-PDFs müssen im Ordner /data liegen
-  ```bash 
+```bash 
        data/
       ├── ausleihregeln_de_en.pdf
       ├── LESE_BibliotheksO.pdf
@@ -199,59 +199,67 @@ Schritt 2- Aktivieren(mit Windows Powershell)
 # 6. RAG-Index bauen
   Einmalig ausführen:
   
-    ```bash
-         python index.py
-  Erwartete Ausgabe:
+```bash
+python index.py
+```
+Erwartete Ausgabe:
     
-   - 📄 Dokumente/Chunks gesamt: XXX
-   - ✅ Index aufgebaut. Chunks gespeichert in 'chroma_bib'
+  - 📄 Dokumente/Chunks gesamt: XXX
+  - ✅ Index aufgebaut. Chunks gespeichert in 'chroma_bib'
      
-  Dadurch wird automatisch ein Ordner erzeugt:
+Dadurch wird automatisch ein Ordner erzeugt:
   
-      ``` chroma_bib/```
+``` chroma_bib/```
       
-  Wenn neue PDFs hinzukommen -> erneut:
+Wenn neue PDFs hinzukommen -> erneut:
   
-   ```bash
-          python index.py
+```bash
+python index.py
+```
     
 # 7. Ollama installieren
     
-  ```bash
+```bash
         https://ollama.com/download
-  Installation prüfen:
+```
+Installation prüfen:
 
-  ```bash
-        ollama --version
- 
+```bash
+ollama --version
+```
+
 # 8. LLM-Modell laden
   Beispiel: Llama 3.1
   
-  ```bash
-       ollama pull llama3.1:70b
-  Modelle anzeigen: 
+```bash
+ollama pull llama3.1:70b
+```
+Modelle anzeigen: 
   
-  ```bash
-       ollama list
+```bash
+ollama list
+```
  
 # 9. Backend testen
-  Testen, ob der RAG funktioniert
-  ```bash
-       python test_rag.py
+Testen, ob der RAG funktioniert
+```bash
+python test_rag.py
+```
    
-  Testen, ob der Chat funktioniert
-  ```bash
-       python chat.py
- 
+Testen, ob der Chat funktioniert
+```bash
+python chat.py
+``` 
 # 10. Streamlit starten
-  Starte den Web-Chatbot:
-  ```bash
-     streamlit run app.py
+Starte den Web-Chatbot:
+```bash
+streamlit run app.py
+```
+Browser öffnet automatisch:
 
-  Browser öffnet automatisch:
-  ```bash
-       http://localhost:
-
+```bash
+http://localhost:
+```
  Dort kann man dann Fragen eingeben wie;
 -  Wie viele Medien darf ich ausleihen?
  
