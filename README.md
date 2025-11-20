@@ -3,7 +3,7 @@
 ## Bibliotheks-Chatbot der Hochschule - RAG-basiertes Frage-Antwort-System
 ----------------------------------------------------------------------------------------
   Dieses Projekt implementiert einen Chatbot für die Hochschulbibliothek.
-  Der Chatbot verwendet ein "Retrieval-Augmented Generation(RAG)"-System, um zuverlässige faktenbasierte Antworten zu liefern-    basierend auf offiziellen Dokumenten.
+  Der Chatbot verwendet ein "Retrieval-Augmented Generation(RAG)"-System, um zuverlässige faktenbasierte Antworten zu     liefern- basierend auf offiziellen Dokumenten.
   Die Studdierenden und Mitarbeiter sollen typische Fragen stellen können - etwa zu:
   - Ausleihe und Leihfristen
   - Verlängerungen von Medien
@@ -13,7 +13,7 @@
   - allgemeine Bibliotheksnutzung
  Der Chatbot soll später in die Hochschulwebseite eingebunden werden, um die Bibliothek für Studierende moderner und      zugänglicher zu machen.
   Zeitraum: 6 Wochen
-  Technologien: Python, Streamlit, RAG(Retrieval-Augmented Generation),ChromaDB,Ollama,PDF-Parsing,Git
+  Technologien: Python 3.12.6, Streamlit, RAG(Retrieval-Augmented Generation),ChromaDB,Ollama,PDF-Parsing,Git
   
 ----------------------------------------------------------------------------------------
 ## Features
@@ -47,7 +47,36 @@ Die textlichen Chunks werden in einer lokalen ChromaDB gespeichert
 ```
 /chroma_bib
     → Collection "bib"
-'''
+```
+Jeder Chunk ist gespeichert mit:
+- Text
+- PDF-Quelle
+- Dateiname
+- Embedding
+-----------------------------------------------------------------------------------------
+## Kontextsuche
+
+Bei jeder Nutzerfrage passiert:
+1. Frage wird analysiert -> Thema erkannt(Ausleihe, Öffnungzeiten, ...)
+2. Chroma liefert die relevantesten Chunks
+3. Bei bedarf werden die Chunks gefiltert
+4. Nur relevente Textstellen gehen an das LLM
+
+-----------------------------------------------------------------------------------------
+## LLM-Beantwortung
+im folgenden Beispiel wird noch für den Prototypen Ollama als LLM benutz. Später sollte es 
+durch ```Llama 3.1 SauerkrautLM 70B Instruct``` abgelöst werden.
+
+Ollama läuft standardmäßig unter : 
+```http://localhost:11434/api/chat```
+
+Das Modell bekommt einen präzisen System-Promt um zu vermeiden dass,
+- halluzieniert wird
+- oder antworten unstrukturiert erzeugt werden
+Bei englischen/deutschen Fragen antwortet es der Sprache entsprechend.
+
+-----------------------------------------------------------------------------------------
+
 
   
 
