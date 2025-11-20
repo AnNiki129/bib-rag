@@ -74,7 +74,8 @@ Streamlit bietet eine einfache Weboberfläche:
 - Eingabefeld für die Fragen
 - Ausgabe aus dem LLM
 - RAG-Kontext und Quellen(intern)
-- läuft über den Aufruf  ```streamlit run app.py ```
+- läuft über den Aufruf  ```bash
+                            streamlit run app.py ```
 
 -----------------------------------------------------------------------------------------
 ## Funktionen des Chatbots
@@ -140,43 +141,43 @@ Streamlit bietet eine einfache Weboberfläche:
   - Installation prüfen:
     Öffne dein Terminal-> Suchleiste -> gib ein ```cmd```:
     
-  - ``` bash
+    ``` bash
         python --version
-  - pip aktualisieren:
+   pip aktualisieren:
     ``` bash
         python -m pip install --upgrade pip 
     
 # 2. Projekt herunterladen
 
-- ```bash
+ ```bash
      git clone https://github.com/AnNiki129/bib-rag.git
-- ``` bash
+ ``` bash
      cd bib-rag
 Falls Repo bereits existiert:
-- ``` bash
+ ``` bash
      git pull
 
 # 3. Virtuelle Umgebung (.venv)
 Schritt 1- Erstellen
-  - ```bash
+   ```bash
           python -m venv .venv
 
 Schritt 2- Aktivieren(mit Windows Powershell)
-  - ```bash
+   ```bash
          .\.venv\Scripts\activate
   Erkennbar an:
-  - ```bash
+   ```bash
         (.venv) C:/Users/...
       
   Falls Scripts gesperrt:
   
- - ```bash
+  ```bash
        Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
   dann zu Schritt 2.
   
 # 4. Abhängigkeiten installieren
    
- - ```bash
+  ```bash
        pip install -r requirements.txt
  
 # 5. Daten vorbereiten
@@ -194,7 +195,7 @@ Schritt 2- Aktivieren(mit Windows Powershell)
 # 6. RAG-Index bauen
   Einmalig ausführen:
   
-   - ```bash
+    ```bash
          python index.py
   Erwartete Ausgabe:
     
@@ -207,44 +208,44 @@ Schritt 2- Aktivieren(mit Windows Powershell)
       
   Wenn neue PDFs hinzukommen -> erneut:
   
-  - ```bash
+   ```bash
           python index.py
     
 # 7. Ollama installieren
     
- - ```bash
+  ```bash
         https://ollama.com/download
   Installation prüfen:
 
- - ```bash
+  ```bash
         ollama --version
  
 # 8. LLM-Modell laden
   Beispiel: Llama 3.1
   
- - ```bash
+  ```bash
        ollama pull llama3.1:70b
   Modelle anzeigen: 
   
- - ```bash
+  ```bash
        ollama list
  
 # 9. Backend testen
   Testen, ob der RAG funktioniert
- - ```bash
+  ```bash
        python test_rag.py
    
   Testen, ob der Chat funktioniert
- - ```bash
+  ```bash
        python chat.py
  
 # 10. Streamlit starten
   Starte den Web-Chatbot:
- - ```bash
+  ```bash
      streamlit run app.py
 
   Browser öffnet automatisch:
- - ```bash
+  ```bash
        http://localhost:
 
  Dort kann man dann Fragen eingeben wie;
@@ -252,19 +253,19 @@ Schritt 2- Aktivieren(mit Windows Powershell)
  
 # Troubleshooting
   - Fehler " Cannot be loaded because running scripts is disabled"
-    - ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
+     ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
       
   - Fehler: Modul „chromadb“ fehlt
-    - ``` pip install chromadb ```
+     ``` pip install chromadb ```
       
   - Fehler bei pyarrow
-    - ``` andere python version installieren```
+     ``` andere python version installieren```
   
   - Index wird nicht aktualisiert
     -> Ordner löschen
-      - ```chroma_bib/```
+       ```chroma_bib/```
     -> Dann:
-      - ```python index.py```
+       ```python index.py```
 
 
 
