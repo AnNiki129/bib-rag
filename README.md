@@ -140,46 +140,50 @@ Streamlit bietet eine einfache Weboberfläche:
   - „Add Python to PATH“ aktivieren.
   - Installation prüfen:
     Öffne dein Terminal-> Suchleiste -> gib ein ```cmd```:
-    
-    ``` bash
+``` bash
         python --version
+```
    pip aktualisieren:
-    ``` bash
+
+``` bash
         python -m pip install --upgrade pip 
-    
+```    
 # 2. Projekt herunterladen
 
- ```bash
+```bash
      git clone https://github.com/AnNiki129/bib-rag.git
- ``` bash
+```
+``` bash
      cd bib-rag
+```
 Falls Repo bereits existiert:
  ``` bash
      git pull
-
+```
 # 3. Virtuelle Umgebung (.venv)
 Schritt 1- Erstellen
-   ```bash
+ ```bash
           python -m venv .venv
-
+ ```
 Schritt 2- Aktivieren(mit Windows Powershell)
    ```bash
          .\.venv\Scripts\activate
+   ```
   Erkennbar an:
    ```bash
         (.venv) C:/Users/...
-      
+   ```   
   Falls Scripts gesperrt:
-  
   ```bash
        Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+  ```
   dann zu Schritt 2.
   
 # 4. Abhängigkeiten installieren
    
   ```bash
        pip install -r requirements.txt
- 
+  ```
 # 5. Daten vorbereiten
  Alle offiziellen Bibliotheks-PDFs müssen im Ordner /data liegen
   ```bash 
