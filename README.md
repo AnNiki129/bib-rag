@@ -44,10 +44,10 @@ damit ist sichergestellt, dass keine Sätze abgeschnitten werden und der Zusamme
 ## Speicherung in ChromaDB
 
 Die textlichen Chunks werden in einer lokalen ChromaDB gespeichert
-´´´bash
+'''bash
 /chroma_bib
     → Collection "bib"
-´´´
+'''
 
   
 
