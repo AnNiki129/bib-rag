@@ -144,7 +144,8 @@ Streamlit bietet eine einfache Weboberfläche:
     
 # 2. Projekt herunterladen
    
-- ```git clone https://github.com/AnNiki129/bib-rag.git```
+- ```bash
+     git clone https://github.com/AnNiki129/bib-rag.git```
 - ```cd bib-rag```
 - ```git pull```
 
