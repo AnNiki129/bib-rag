@@ -220,7 +220,7 @@ python index.py
 # 7. Ollama installieren
     
 ```bash
-        https://ollama.com/download
+https://ollama.com/download
 ```
 Installation prüfen:
 
@@ -264,20 +264,25 @@ http://localhost:
 -  Wie viele Medien darf ich ausleihen?
  
 # Troubleshooting
-  - Fehler " Cannot be loaded because running scripts is disabled"
-     ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
-      
+
+  - Fehler beim ausführen von  ```./.venv/Scripts/Activate``` " Cannot be loaded because running scripts is disabled"
+    
+```bash
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
+```      
   - Fehler: Modul „chromadb“ fehlt
-     ``` pip install chromadb ```
+```bash
+pip install chromadb
+```
       
   - Fehler bei pyarrow
-     ``` andere python version installieren```
+``` andere python version installieren```
   
   - Index wird nicht aktualisiert
-    -> Ordner löschen
-       ```chroma_bib/```
-    -> Dann:
-       ```python index.py```
+-> Ordner löschen
+```chroma_bib/```
+-> Dann:
+```python index.py```
 
 
 
