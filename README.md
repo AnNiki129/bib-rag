@@ -145,9 +145,11 @@ Streamlit bietet eine einfache Weboberfläche:
 # 2. Projekt herunterladen
    
 - ```bash
-     git clone https://github.com/AnNiki129/bib-rag.git```
-- ```cd bib-rag```
-- ```git pull```
+     git clone https://github.com/AnNiki129/bib-rag.git
+- ``` bash
+     cd bib-rag
+- ``` bash
+     git pull```
 
 # 3. Virtuelle Umgebung (.venv)
    
