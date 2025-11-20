@@ -133,7 +133,7 @@ Streamlit bietet eine einfache Weboberfläche:
 
 ## Installation & Setup
 
-1. Python installieren
+# 1. Python installieren
    
   - Python 3.10 oder 3.11 von https://www.python.org/downloads/ herunterladen.
   - „Add Python to PATH“ aktivieren.
@@ -142,13 +142,13 @@ Streamlit bietet eine einfache Weboberfläche:
   - pip aktualisieren:
     ```python -m pip install --upgrade pip ```
     
-2. Projekt herunterladen
+# 2. Projekt herunterladen
    
 - ```git clone https://github.com/AnNiki129/bib-rag.git```
 - ```cd bib-rag```
 - ```git pull```
 
-3. Virtuelle Umgebung (.venv)
+# 3. Virtuelle Umgebung (.venv)
    
  - ```python -m venv .venv```
  - ```.\.venv\Scripts\activate```
@@ -157,52 +157,52 @@ Streamlit bietet eine einfache Weboberfläche:
   
  - ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
   
-4. Abhängigkeiten installieren
+# 4. Abhängigkeiten installieren
    
  - ```pip install -r requirements.txt```
  
-5. Daten vorbereiten
+# 5. Daten vorbereiten
 
  - ```/data Ordner enthält alle Bibliotheks-PDFs.```
  
-6. RAG-Index bauen
+# 6. RAG-Index bauen
     
  - ```python index.py```
  
-7. Ollama installieren
+# 7. Ollama installieren
     
  - ```https://ollama.com/download```
  
-8. LLM-Modell laden
+# 8. LLM-Modell laden
     
  - ```ollama pull llama3.1:70b```
  - ```ollama list```
  
-9. Backend testen
+# 9. Backend testen
     
  - ```python test_rag.py```
  - ```python chat.py```
  
-10. Streamlit starten
+# 10. Streamlit starten
     
  - ```streamlit run app.py```
  - ```http://localhost:```
  
-Troubleshooting
- Fehler " Cannot be loaded because running scripts is disabled"
-  - ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
-    
- Fehler: Modul „chromadb“ fehlt
-  - ``` pip install chromadb ```
-    
- Fehler bei pyarrow
-  - ``` andere python version installieren```
-
- Index wird nicht aktualisiert
-  -> Ordner löschen
-    - ```chroma_bib/```
-  -> Dann:
-    - ```python index.py```
+# Troubleshooting
+   Fehler " Cannot be loaded because running scripts is disabled"
+    - ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
+      
+   Fehler: Modul „chromadb“ fehlt
+    - ``` pip install chromadb ```
+      
+   Fehler bei pyarrow
+    - ``` andere python version installieren```
+  
+   Index wird nicht aktualisiert
+    -> Ordner löschen
+      - ```chroma_bib/```
+    -> Dann:
+      - ```python index.py```
 
 
 
