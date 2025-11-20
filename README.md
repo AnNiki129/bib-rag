@@ -74,8 +74,10 @@ Streamlit bietet eine einfache Weboberfläche:
 - Eingabefeld für die Fragen
 - Ausgabe aus dem LLM
 - RAG-Kontext und Quellen(intern)
-- läuft über den Aufruf  ```bash
-                            streamlit run app.py ```
+- läuft über den Aufruf
+```bash
+streamlit run app.py
+```
 
 -----------------------------------------------------------------------------------------
 ## Funktionen des Chatbots
