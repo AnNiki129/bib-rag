@@ -135,51 +135,99 @@ Streamlit bietet eine einfache Weboberfläche:
 
 # 1. Python installieren
    
-  - Python 3.10 oder 3.11 von https://www.python.org/downloads/ herunterladen.
+  - Python 3.11 oder 3.12 von https://www.python.org/downloads/ herunterladen.
   - „Add Python to PATH“ aktivieren.
   - Installation prüfen:
-    ```python --version```
+    Öffne dein Terminal-> Suchleiste -> gib ein ```cmd```:
+    
+    ``` bash
+        python --version```
   - pip aktualisieren:
-    ```python -m pip install --upgrade pip ```
+    ``` bash
+        python -m pip install --upgrade pip ```
     
 # 2. Projekt herunterladen
-   
+
 - ```bash
      git clone https://github.com/AnNiki129/bib-rag.git
 - ``` bash
-     cd bib-rag
+     cd bib-rag```
+Falls Repo bereits existiert:
 - ``` bash
      git pull```
 
 # 3. Virtuelle Umgebung (.venv)
-   
- - ```python -m venv .venv```
- - ```.\.venv\Scripts\activate```
- 
+  Schritt 1- Erstellen
+     - ```bash
+       python -m venv .venv```
+
+  Schritt 2- Aktivieren(mit Windows Powershell)
+     - ```bash
+       .\.venv\Scripts\activate```
+      Erkennbar an:
+      ``` bash
+      (.venv) C:/Users/...```
+      
   Falls Scripts gesperrt:
   
- - ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
+ - ```bash
+       Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
+  dann zu Schritt 2.
   
 # 4. Abhängigkeiten installieren
    
- - ```pip install -r requirements.txt```
+ - ```bash
+       pip install -r requirements.txt```
  
 # 5. Daten vorbereiten
+ Alle offiziellen Bibliotheks-PDFs müssen im Ordner /data liegen
+    ```bash 
+       data/
+      ├── ausleihregeln_de_en.pdf
+      ├── LESE_BibliotheksO.pdf
+      ├── LESE_Gebuehrenverzeichnis.pdf
+      ├── bankverbindung.pdf
+      ├── standortbibliothek_zweibruecken.pdf
+      └── ... ```
 
- - ```/data Ordner enthält alle Bibliotheks-PDFs.```
  
 # 6. RAG-Index bauen
+  Einmalig ausführen:
+  
+   - ```bash
+         python index.py```
+  Erwartete Ausgabe:
     
- - ```python index.py```
- 
+   - 📄 Dokumente/Chunks gesamt: XXX
+     ✅ Index aufgebaut. Chunks gespeichert in 'chroma_bib'
+     
+  Dadurch wird automatisch ein Ordner erzeugt:
+  
+      ``` chroma_bib/```
+      
+  Wenn neue PDFs hinzukommen -> erneut:
+  
+    - ```bash
+          python index.py```
+    
 # 7. Ollama installieren
     
- - ```https://ollama.com/download```
+ - ```bash
+        https://ollama.com/download```
+  Installation prüfen:
+
+    ```bash
+        ollama --version```
  
 # 8. LLM-Modell laden
-    
- - ```ollama pull llama3.1:70b```
- - ```ollama list```
+  Beispiel: Llama 3.1
+  
+ - ```bash
+       ollama pull llama3.1:70b```
+  Modelle anzeigen: 
+  
+ - ```bash
+       ollama list```
  
 # 9. Backend testen
     
