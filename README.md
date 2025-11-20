@@ -26,7 +26,7 @@
 -----------------------------------------------------------------------------------------
 ## Systemarchitektur
 
-Alle relevanten Bibliotheksinformationen wurden gesammelt und in PDF-Form bereitgestellt unter :bib-rag/data
+Alle relevanten Bibliotheksinformationen wurden gesammelt und in PDF-Form bereitgestellt unter ´´´bash bib-rag/data ´´´
 - Bibliotheksordnung
 - Gebührenverzeichnis
 - Ausleihregeln
@@ -44,9 +44,10 @@ damit ist sichergestellt, dass keine Sätze abgeschnitten werden und der Zusamme
 ## Speicherung in ChromaDB
 
 Die textlichen Chunks werden in einer lokalen ChromaDB gespeichert
+´´´bash
 /chroma_bib
     → Collection "bib"
-
+´´´
 
   
 
