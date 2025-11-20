@@ -144,55 +144,65 @@ Streamlit bietet eine einfache Weboberfläche:
     
 2. Projekt herunterladen
    
-- ```git clone https://github.com/DEIN-USERNAME/bib-rag.git```
+- ```git clone https://github.com/AnNiki129/bib-rag.git```
 - ```cd bib-rag```
 - ```git pull```
 
-4. Virtuelle Umgebung (.venv)
+3. Virtuelle Umgebung (.venv)
    
-  ```python -m venv .venv```
-  ```.\.venv\Scripts\activate```
+ - ```python -m venv .venv```
+ - ```.\.venv\Scripts\activate```
  
   Falls Scripts gesperrt:
   
-  ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
+ - ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
   
-6. Abhängigkeiten installieren
+4. Abhängigkeiten installieren
    
- ```pip install -r requirements.txt```
+ - ```pip install -r requirements.txt```
  
-8. Daten vorbereiten
+5. Daten vorbereiten
 
- ```/data Ordner enthält alle Bibliotheks-PDFs.```
+ - ```/data Ordner enthält alle Bibliotheks-PDFs.```
  
-10. RAG-Index bauen
+6. RAG-Index bauen
     
- ```python index.py```
+ - ```python index.py```
  
-12. Ollama installieren
+7. Ollama installieren
     
- ```https://ollama.com/download```
+ - ```https://ollama.com/download```
  
-14. LLM-Modell laden
+8. LLM-Modell laden
     
- ```ollama pull llama3.1:70b```
- ```ollama list```
+ - ```ollama pull llama3.1:70b```
+ - ```ollama list```
  
-16. Backend testen
+9. Backend testen
     
- ```python test_rag.py```
- ```python chat.py```
+ - ```python test_rag.py```
+ - ```python chat.py```
  
-18. Streamlit starten
+10. Streamlit starten
     
- ```streamlit run app.py```
- ```http://localhost:```
+ - ```streamlit run app.py```
+ - ```http://localhost:```
  
 Troubleshooting
-- Scripts disabled ® Set-ExecutionPolicy …
-- chromadb fehlt ® pip install chromadb
-- pyarrow Fehler ® Python-Version prüfen
+ Fehler " Cannot be loaded because running scripts is disabled"
+  - ```Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass```
+    
+ Fehler: Modul „chromadb“ fehlt
+  - ``` pip install chromadb ```
+    
+ Fehler bei pyarrow
+  - ``` andere python version installieren```
 
+ Index wird nicht aktualisiert
+  -> Ordner löschen
+    - ```chroma_bib/```
+  -> Dann:
+    - ```python index.py```
 
 
 
