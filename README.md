@@ -163,27 +163,27 @@ Falls Repo bereits existiert:
 # 3. Virtuelle Umgebung (.venv)
 Schritt 1- Erstellen
  ```bash
-          python -m venv .venv
+ python -m venv .venv
  ```
 Schritt 2- Aktivieren(mit Windows Powershell)
-   ```bash
-         .\.venv\Scripts\activate
-   ```
-  Erkennbar an:
-   ```bash
-        (.venv) C:/Users/...
-   ```   
-  Falls Scripts gesperrt:
-  ```bash
-       Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-  ```
+ ```bash
+     .\.venv\Scripts\activate
+ ```
+ Erkennbar an:
+ ```bash
+     (.venv) C:/Users/...
+ ```   
+ Falls Scripts gesperrt:
+ ```bash
+    Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+ ```
   dann zu Schritt 2.
   
 # 4. Abhängigkeiten installieren
    
-  ```bash
-       pip install -r requirements.txt
-  ```
+ ```bash
+   pip install -r requirements.txt
+ ```
 # 5. Daten vorbereiten
  Alle offiziellen Bibliotheks-PDFs müssen im Ordner /data liegen
   ```bash 
