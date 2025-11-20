@@ -82,7 +82,8 @@ Streamlit bietet eine einfache Weboberfläche:
 - Eingabefeld für die Fragen
 - Ausgabe aus dem LLM
 - RAG-Kontext und Quellen(intern)
-- läuft über ```Terminal streamlit run app.py ```
+- läuft über ```Terminal
+                streamlit run app.py ```
 
   
 
