@@ -76,11 +76,57 @@ Streamlit bietet eine einfache Weboberfläche:
 - läuft über den Aufruf  ```streamlit run app.py ```
 
 -----------------------------------------------------------------------------------------
-## Fun
+## Funktionen des Chatbots
 
-  
+  # Antwortgenerierung(LLM +RAG)
+   Der bot beantwortet Fragen auf Grundlagen der offiziellen PDF-Dokumente
 
+  # Automatische Spracherkennung
+   - wenn Frage in Englisch gestellt -> Englische Ausgabe, ansosnten auf Deutsch
 
+  # Antwortformat
+   -  Kurzantwort:
+        - 1–2 Stichpunkte mit der wichtigsten Information.
+
+        Details:
+        - 2–4 kurze Sätze mit den wichtigsten Details aus dem Kontext.
+        - Keine erfundenen Informationen.
+          
+   - offizielle Links
+   - Quellenagaben
+     
+  # Sichere vermeidung von Halluinationen 
+   - durch Regeln
+   - durch Filter
+     
+  # lokale Datenhaltung(keine DSGVO nötig da auch keine Nutzerdaten gespeichert werden) 
+
+ -----------------------------------------------------------------------------------------
+
+ ## Projektstruktur
+```bib-rag/
+│
+├── app.py                # Streamlit-Weboberfläche
+├── chat.py               # LLM + Prompt + Language Detection + RAG Integration
+├── chat_finder.py        # ChromaDB Loader und Kontextsuche
+├── chatOpenAI.py         # gleiche Struktur wie chat.py nur mit OpenAI-KEY Anforderung
+├── index.py              # PDF-Importer + Chunker + Embedding-Generator
+├── test_rag.py           # Testtool zum Prüfen der RAG-Ergebnisse
+│
+├── data/                 # Alle Bibliotheks-PDFs
+│   ├── ausleihregeln_de_en.pdf
+│   ├── LESE_BibliotheksO.pdf
+│   ├── LESE_Gebuehrenverzeichnis.pdf
+│   ├── standortbibliothek_zweibruecken.pdf
+│   ├── bankverbindung.pdf
+│   ├── … (weitere)
+│
+├── chroma_bib/           # ChromaDB Index (wird automatisch erstellt)
+│
+├── .venv/                # Python-Virtual-Environment
+├── requirements.txt      # Abhängigkeiten
+└── README.md             # Projektdokumentation
+```
 
 
 
