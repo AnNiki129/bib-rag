@@ -140,7 +140,7 @@ Streamlit bietet eine einfache Weboberfläche:
   - Installation prüfen:
     Öffne dein Terminal-> Suchleiste -> gib ein ```cmd```:
     
-    ``` bash
+  - ``` bash
         python --version```
   - pip aktualisieren:
     ``` bash
@@ -181,16 +181,16 @@ Falls Repo bereits existiert:
  
 # 5. Daten vorbereiten
  Alle offiziellen Bibliotheks-PDFs müssen im Ordner /data liegen
-    ```bash 
+  ```bash 
        data/
       ├── ausleihregeln_de_en.pdf
       ├── LESE_BibliotheksO.pdf
       ├── LESE_Gebuehrenverzeichnis.pdf
       ├── bankverbindung.pdf
       ├── standortbibliothek_zweibruecken.pdf
-      └── ... ```
+      └── ... 
 
- 
+ ```
 # 6. RAG-Index bauen
   Einmalig ausführen:
   
