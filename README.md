@@ -199,7 +199,7 @@ Falls Repo bereits existiert:
   Erwartete Ausgabe:
     
    - 📄 Dokumente/Chunks gesamt: XXX
-     ✅ Index aufgebaut. Chunks gespeichert in 'chroma_bib'
+   - ✅ Index aufgebaut. Chunks gespeichert in 'chroma_bib'
      
   Dadurch wird automatisch ein Ordner erzeugt:
   
@@ -230,14 +230,22 @@ Falls Repo bereits existiert:
        ollama list```
  
 # 9. Backend testen
-    
+  Testen, ob der RAG funktioniert
  - ```python test_rag.py```
+   
+  Testen, ob der Chat funktioniert
  - ```python chat.py```
  
 # 10. Streamlit starten
-    
- - ```streamlit run app.py```
+  Starte den Web-Chatbot:
+ - ```bash
+     streamlit run app.py```
+
+  Browser öffnet automatisch:
  - ```http://localhost:```
+
+Dort kann man dann Fragen eingeben wie;
+ -  Wie viele Medien darf ich ausleihen?
  
 # Troubleshooting
    Fehler " Cannot be loaded because running scripts is disabled"
