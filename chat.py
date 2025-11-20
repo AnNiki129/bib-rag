@@ -5,11 +5,31 @@ import requests
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
+
+def detect_language(text: str) -> str:
+    """
+    Sehr einfache Spracherkennung:
+    - gibt 'en' zurück, wenn der Text eher nach Englisch aussieht
+    - sonst 'de'
+    """
+    t = text.lower()
+
+    de_keywords = ["wie", "wann", "wo", "wieviel", "wieviele", "bücher", "ausleihe", "ausleihen", "leihfrist", "gebühr", "bibliothek"]
+    en_keywords = ["how", "when", "where", "what", "books", "loan", "library", "fee", "online", "search"]
+
+    score_de = sum(kw in t for kw in de_keywords)
+    score_en = sum(kw in t for kw in en_keywords)
+
+    # Wenn mehr englische Schlüsselwörter: Englisch
+    if score_en > score_de:
+        return "en"
+    # Sonst Standard: Deutsch
+    return "de"
+
+
 CHROMA_DIR = "chroma_bib"
 COLLECTION_NAME = "bib"
 
-#🗝️ API-Key aus Umgebungsvariable lesen 
-#API_KEY = os.getenv("LLM_API_KEY")
 
 # 🔁 Werte an Provider anpassen
 API_URL = "http://localhost:11434/api/chat"  # Beispiel-Endpunkt
@@ -28,8 +48,9 @@ def load_collection():
     return collection
 
 
-def retrieve_context(collection, question: str, k: int = 4):
-    """Holt die wichtigsten Textstellen aus dem RAG-Index."""
+def retrieve_context(collection, question: str, k: int = 8):
+    """Holt die wichtigsten Textstellen aus dem RAG und filtert nach Themen."""
+
     result = collection.query(
         query_texts=[question],
         n_results=k,
@@ -37,43 +58,147 @@ def retrieve_context(collection, question: str, k: int = 4):
 
     docs = result["documents"][0]
     metas = result["metadatas"][0]
+    docs_metas = list(zip(docs, metas))
 
+    # THEMEN-ERKENNUNG  -------------------------------------------
+    q = question.lower()
+
+    thema_ausleihe = ["ausleihe", "ausleihen", "leihfrist", "verlängern", "verlängerung", "medien", "bücher"]
+    thema_gebuehren = ["gebühr", "säumnis", "mahnung", "müssen zahlen"]
+    thema_oeffnungszeiten = ["geöffnet", "öffnungszeiten", "wann"]
+    thema_bank = ["bankverbindung", "iban", "überweisung"]
+    thema_online = ["search", "ebooks", "online", "journal", "zugriff", "from home"]
+
+    if any(w in q for w in thema_ausleihe):
+        keywords = ["leihfrist", "wochen", "verlängern", "ausleihe", "medien", "ausleihen"]
+    elif any(w in q for w in thema_gebuehren):
+        keywords = ["gebühr", "säumnis", "mahnung", "zahlen"]
+    elif any(w in q for w in thema_oeffnungszeiten):
+        keywords = ["öffnungszeiten", "geöffnet", "bibliothek"]
+    elif any(w in q for w in thema_bank):
+        keywords = ["iban", "konto", "bank", "überweisung"]
+    elif any(w in q for w in thema_online):
+        keywords = ["online", "katalog", "zugriff", "discovery", "e-book"]
+    else:
+        keywords = []
+
+    # Filter anwenden --------------------------------------------------
+    if keywords:
+        filtered = []
+        for doc, meta in docs_metas:
+            text = doc.lower()
+            if any(kw in text for kw in keywords):
+                filtered.append((doc, meta))
+
+        if filtered:
+            docs_metas = filtered
+
+    # Kontext zusammenbauen -------------------------------------------
     blocks = []
-    for i, (doc, meta) in enumerate(zip(docs, metas), start=1):
+    for i, (doc, meta) in enumerate(docs_metas, start=1):
         title = meta.get("title", "Quelle")
         source = meta.get("source", "")
         block = f"[{i}] {title} ({source})\n{doc}"
         blocks.append(block)
 
-    context = "\n\n---\n\n".join(blocks)
-    return context, list(zip(docs, metas))
+    return "\n\n---\n\n".join(blocks), docs_metas
 
 
 def call_llm(question: str, context: str) -> str:
-    """Ruft das lokale LLM über Ollama auf."""
+    """Ruft das LLM über Ollama auf und antwortet je nach Sprache der Frage nur DE oder nur EN."""
 
-    system_prompt = textwrap.dedent("""
-        Du bist ein Bibliotheksassistent an einer Hochschule.
-        Antworte ausschließlich auf Basis der bereitgestellten Kontexte.
-        Wenn eine Information nicht eindeutig im Kontext steht,
-        sage ehrlich, dass du es nicht sicher weißt und verweise auf die Bibliothek.
-        Antworte kurz, sachlich und auf Deutsch.
-    """)
+    lang = detect_language(question)
 
-    user_prompt = f"""
-    Frage eines Studierenden:
-    {question}
+    if lang == "en":
+        # ✅ ENGLISCHE ANTWORT
+        system_prompt = textwrap.dedent("""
+            You are a university library assistant.
+            You answer questions about the library (loan periods, renewals, opening hours,
+            fees, bank details, online catalog, etc.).
 
-    Relevante Auszüge aus Bibliotheksdokumenten:
+            RULES:
+            - Use ONLY the information from the provided context.
+            - Do NOT invent facts or links.
+            - Answer ONLY in English.
+            - If the answer is not clearly contained in the context, say so explicitly
+              and refer the user to the library staff.
+            - You may use the official catalog and library links if relevant.
+        """)
 
-    {context}
+        user_prompt = f"""
+        Question from a student:
+        {question}
 
-    Formuliere eine klare, gut verständliche Antwort auf Deutsch.
-    Nenne am Ende in einer Zeile, aus welchen Abschnitten du geantwortet hast,
-    z.B.: Quellen: [1], [3]
-    """
+        Relevant context from library documents:
+        {context}
 
-    # Für Ollama kein API-Key nötig
+        Task:
+        - Read the context carefully.
+        - Answer the question ONLY using information from this context.
+        - If the context does not contain a reliable answer, say that it cannot be answered
+          reliably and suggest contacting the library.
+
+        Answer format (English only):
+
+        Short answer:
+        - 1–2 bullet points with the key information.
+
+        Details:
+        - 2–4 short sentences with important details from the context.
+        - Do not invent information.
+
+        Links (if relevant):
+        - [English link title]: URL
+
+        Sources:
+        - e.g. Sources: [1], [3]
+        """
+
+    else:
+        # ✅ DEUTSCHE ANTWORT
+        system_prompt = textwrap.dedent("""
+            Du bist ein Bibliotheksassistent an einer Hochschule.
+            Du beantwortest Fragen zur Bibliothek (Ausleihe, Verlängerung, Öffnungszeiten,
+            Gebühren, Bankverbindung, Online-Katalog usw.).
+
+            REGELN:
+            - Nutze AUSSCHLIESSLICH die Informationen aus dem bereitgestellten Kontext.
+            - Erfinde KEINE Fakten und KEINE zusätzlichen Links.
+            - Antworte NUR auf Deutsch.
+            - Wenn die Frage im Kontext nicht sicher beantwortet werden kann,
+              sage das klar und verweise auf die Bibliothek.
+            - Du darfst offizielle Links zur Bibliothek nennen, wenn sie zur Frage passen.
+        """)
+
+        user_prompt = f"""
+        Frage eines Studierenden:
+        {question}
+
+        Relevante Auszüge aus Bibliotheksdokumenten:
+        {context}
+
+        Aufgabe:
+        - Lies den Kontext sorgfältig.
+        - Beantworte die Frage NUR mit Informationen aus diesem Kontext.
+        - Wenn keine sichere Antwort möglich ist, schreibe das ausdrücklich
+          und schlage vor, sich direkt an die Bibliothek zu wenden.
+
+        Antwortformat (nur Deutsch):
+
+        Kurzantwort:
+        - 1–2 Stichpunkte mit der wichtigsten Information.
+
+        Details:
+        - 2–4 kurze Sätze mit den wichtigsten Details aus dem Kontext.
+        - Keine erfundenen Informationen.
+
+        Links (falls sinnvoll):
+        - [Linktitel]: URL
+
+        Quellen:
+        - z.B.: Quellen: [1], [3]
+        """
+
     headers = {
         "Content-Type": "application/json",
     }
@@ -82,18 +207,18 @@ def call_llm(question: str, context: str) -> str:
         "model": MODEL_NAME,
         "messages": [
             {"role": "system", "content": system_prompt.strip()},
-            {"role": "user", "content": user_prompt.strip()},
+            {"role": "user",   "content": user_prompt.strip()},
         ],
-        # Wichtig: kein Streaming, sonst kommen mehrere JSON-Objekte
         "stream": False,
     }
 
     resp = requests.post(API_URL, headers=headers, json=body, timeout=120)
     resp.raise_for_status()
     data = resp.json()
-
-    # Ollama-Format: Antwort steckt in data["message"]["content"]
     return data["message"]["content"]
+
+
+
 
 
 
