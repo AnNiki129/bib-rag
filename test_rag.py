@@ -26,7 +26,7 @@ def main():
 
         result = collection.query(
             query_texts=[frage],
-            n_results=3,
+            n_results=8,
         )
 
         docs = result["documents"][0]
