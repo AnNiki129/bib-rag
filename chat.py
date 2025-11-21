@@ -63,20 +63,21 @@ def retrieve_context(collection, question: str, k: int = 8):
     # THEMEN-ERKENNUNG  -------------------------------------------
     q = question.lower()
 
-    thema_ausleihe = ["ausleihe", "ausleihen", "leihfrist", "verlängern", "verlängerung", "medien", "bücher"]
-    thema_gebuehren = ["gebühr", "säumnis", "mahnung", "müssen zahlen"]
-    thema_oeffnungszeiten = ["geöffnet", "öffnungszeiten", "wann"]
-    thema_bank = ["bankverbindung", "iban", "überweisung"]
+    thema_ausleihe = ["ausleihe", "ausleihen", "leihfrist", "verlängern", "verlängerung", "medien", "bücher", "buch", "fernleihe", 
+    "mitarbeiter", "student", "wie viele"]
+    thema_gebuehren = ["gebühr", "säumnis", "mahnung", "müssen zahlen","kosten", "wie viel"]
+    thema_oeffnungszeiten = ["geöffnet", "öffnungszeiten", "wann", "zweibrücken", "kaiserslautern", "pirmasens", "standort"]
+    thema_bank = ["bankverbindung", "iban", "überweisung","zu spät", "zahlen", "konto"]
     thema_online = ["search", "ebooks", "online", "journal", "zugriff", "from home"]
 
     if any(w in q for w in thema_ausleihe):
-        keywords = ["leihfrist", "wochen", "verlängern", "ausleihe", "medien", "ausleihen"]
+        keywords = ["leihfrist", "wochen", "verlängern", "ausleihe", "medien", "ausleihen", "fernleihe", "bücher", "buch",  "mitarbeiter", "student", "ich", "wie viele"]
     elif any(w in q for w in thema_gebuehren):
-        keywords = ["gebühr", "säumnis", "mahnung", "zahlen"]
+        keywords = ["gebühr", "säumnis", "mahnung", "zahlen", "kosten", "müssen", "wie viel"]
     elif any(w in q for w in thema_oeffnungszeiten):
-        keywords = ["öffnungszeiten", "geöffnet", "bibliothek"]
+        keywords = ["öffnungszeiten", "geöffnet", "bibliothek", "standort", "kaiserslautern", "zweibrücken", "pirmasens", "wann"]
     elif any(w in q for w in thema_bank):
-        keywords = ["iban", "konto", "bank", "überweisung"]
+        keywords = ["iban", "konto", "bank", "überweisung", "zahlen", "bankverbindung", "zu spät"]
     elif any(w in q for w in thema_online):
         keywords = ["online", "katalog", "zugriff", "discovery", "e-book"]
     else:
@@ -126,7 +127,7 @@ def call_llm(question: str, context: str) -> str:
         """)
 
         user_prompt = f"""
-        Question from a student:
+        Question from a person:
         {question}
 
         Relevant context from library documents:
@@ -148,7 +149,7 @@ def call_llm(question: str, context: str) -> str:
         - Do not invent information.
 
         Links (if relevant):
-         -   eMedien: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/emedien
+         -  eMedien: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/emedien
 
         -   Online-Catalog: https://hbz-hkl.primo.exlibrisgroup.com/discovery/search?vid=49HBZ_HKL:VU1
 
@@ -181,7 +182,7 @@ def call_llm(question: str, context: str) -> str:
         """)
 
         user_prompt = f"""
-        Frage eines Studierenden:
+        Frage einer Person:
         {question}
 
         Relevante Auszüge aus Bibliotheksdokumenten:
@@ -202,7 +203,7 @@ def call_llm(question: str, context: str) -> str:
         - 2–4 kurze Sätze mit den wichtigsten Details aus dem Kontext.
         - Keine erfundenen Informationen.
 
-        Links (falls sinnvoll):
+        Links:
         -   eMedien: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/emedien
 
         -   Online-Catalog: https://hbz-hkl.primo.exlibrisgroup.com/discovery/search?vid=49HBZ_HKL:VU1
@@ -214,6 +215,8 @@ def call_llm(question: str, context: str) -> str:
         -   Öffnungszeiten-Standort-Zweibrücken: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-zweibruecken
 
         -   Öffnungszeiten-Standort-Pirmasens: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-pirmasens
+    
+
 
 
         Quellen:
