@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hochschulbibliothek – Prototyp</title>
+  <style>
+    :root{
+      --bg:#f6f7f9;
+      --card:#ffffff;
+      --text:#1b1f24;
+      --muted:#5b6470;
+      --line:#e6e9ee;
+      --accent:#0b5cab;
+      --accent2:#0a4a87;
+      --warn-bg:#fff7e6;
+      --warn-line:#ffd59a;
+      --radius:14px;
+      --shadow:0 10px 30px rgba(16,24,40,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+      line-height:1.45;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Layout */
+    .container{max-width:1200px; margin:0 auto; padding:0 16px;}
+    .topbar{
+      background:#0e223a;
+      color:#dbe4ef;
+      font-size:14px;
+    }
+    .topbar .row{
+      display:flex; gap:14px; align-items:center; justify-content:flex-end;
+      padding:10px 0;
+      flex-wrap:wrap;
+    }
+    .topbar a{color:#dbe4ef}
+    header{
+      background:linear-gradient(180deg,#0f2c4f 0%, #0d2542 100%);
+      color:#fff;
+      position:sticky; top:0; z-index:20;
+      border-bottom:1px solid rgba(255,255,255,.12);
+    }
+    .header-row{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .logo{
+      width:38px; height:38px; border-radius:10px;
+      background:rgba(255,255,255,.14);
+      display:grid; place-items:center;
+      font-weight:800;
+    }
+    nav{display:flex; gap:14px; flex-wrap:wrap}
+    nav a{
+      color:#fff; opacity:.92; font-weight:600; font-size:14px;
+      padding:8px 10px; border-radius:10px;
+    }
+    nav a:hover{background:rgba(255,255,255,.10); text-decoration:none}
+
+    .search{
+      display:flex; gap:8px; align-items:center;
+      background:rgba(255,255,255,.12);
+      padding:8px; border-radius:12px;
+      min-width:260px;
+    }
+    .search input{
+      width:100%; border:0; outline:0; background:transparent; color:#fff;
+      font-size:14px;
+    }
+    .search button{
+      border:0; cursor:pointer;
+      padding:8px 10px; border-radius:10px;
+      background:rgba(255,255,255,.18);
+      color:#fff; font-weight:700;
+    }
+    .search button:hover{background:rgba(255,255,255,.25)}
+
+    main{padding:26px 0 40px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.4fr .9fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .search{min-width:0; flex:1}
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .card .hd{
+      padding:16px 16px 0 16px;
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:12px;
+    }
+    .card h1, .card h2{
+      margin:0 0 8px 0;
+      line-height:1.2;
+    }
+    .card .bd{padding:0 16px 16px 16px}
+    .muted{color:var(--muted)}
+    .divider{height:1px; background:var(--line); margin:14px 0}
+
+    .alert{
+      background:var(--warn-bg);
+      border:1px solid var(--warn-line);
+      border-radius:12px;
+      padding:12px 12px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#eef4ff;
+      border:1px solid #d7e6ff;
+      color:#1b3a73;
+      font-size:13px; font-weight:700;
+      white-space:nowrap;
+    }
+
+    .contacts{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 980px){
+      .contacts{grid-template-columns:1fr}
+    }
+    .contact{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      background:#fff;
+    }
+    .contact b{display:block; margin-bottom:6px}
+    .contact a{display:inline-block; margin-right:10px; font-size:14px}
+
+    .quicklinks{
+      display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .quicklinks a{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-weight:700;
+      font-size:14px;
+    }
+    .quicklinks a:hover{border-color:#cfd6e1; text-decoration:none}
+
+    .tiles{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:12px;
+    }
+    @media (max-width: 600px){
+      .tiles{grid-template-columns:1fr}
+    }
+    .tile{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      background:#fff;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .tile .title{font-weight:800}
+    .tile .desc{color:var(--muted); font-size:14px}
+    .tile button{
+      margin-top:auto;
+      border:0; cursor:pointer;
+      background:var(--accent);
+      color:#fff;
+      padding:10px 12px;
+      border-radius:12px;
+      font-weight:800;
+    }
+    .tile button:hover{background:var(--accent2)}
+
+    /* LLM Panel */
+    .chat{
+      position:sticky; top:92px;
+    }
+    .chat .bd{display:flex; flex-direction:column; gap:10px}
+    .chatlog{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      padding:10px;
+      height:360px;
+      overflow:auto;
+    }
+    .msg{
+      padding:10px 10px;
+      border-radius:12px;
+      margin:8px 0;
+      max-width:92%;
+      white-space:pre-wrap;
+      word-wrap:break-word;
+    }
+    .msg.user{background:#eef4ff; margin-left:auto; border:1px solid #d7e6ff}
+    .msg.ai{background:#f4f6f8; border:1px solid #e7eaef}
+    .composer{
+      display:flex; gap:8px;
+    }
+    .composer textarea{
+      flex:1;
+      resize:none;
+      min-height:44px;
+      max-height:120px;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      outline:0;
+      font-family:inherit;
+      font-size:14px;
+      background:#fff;
+    }
+    .composer button{
+      border:0; cursor:pointer;
+      padding:10px 14px;
+      border-radius:12px;
+      background:var(--accent);
+      color:#fff;
+      font-weight:900;
+      min-width:96px;
+    }
+    .composer button:disabled{opacity:.6; cursor:not-allowed}
+    footer{
+      margin-top:18px;
+      padding:18px 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .sr-only{position:absolute; left:-9999px}
+  </style>
+</head>
+
+<body>
+  <!-- kleine Linkleiste oben -->
+  <div class="topbar">
+    <div class="container">
+      <div class="row">
+        <a href="#" data-action="noop">English</a>
+        <a href="#" data-action="noop">Logins</a>
+        <a href="#" data-action="noop">Standorte</a>
+        <a href="#" data-action="noop">Kontakt</a>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <div class="header-row">
+        <div class="brand" aria-label="Seitenkopf">
+          <div class="logo" aria-hidden="true">HS</div>
+          <div>
+            <div style="font-size:14px; opacity:.9; font-weight:700;">Hochschule</div>
+            <div style="font-size:16px; font-weight:900;">Hochschulbibliothek</div>
+          </div>
+        </div>
+
+        <nav aria-label="Hauptnavigation">
+          <a href="#" data-section="start">Start</a>
+          <a href="#" data-section="services">Services</a>
+          <a href="#" data-section="aktuelles">Aktuelles</a>
+          <a href="#" data-section="kontakt">Kontakt</a>
+        </nav>
+
+        <form class="search" id="siteSearch" role="search" aria-label="Seitensuche">
+          <label class="sr-only" for="q">Suche</label>
+          <input id="q" name="q" placeholder="Suche (Demo) …" autocomplete="off" />
+          <button type="submit">Suchen</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div class="grid">
+        <!-- LEFT: Page content -->
+        <section class="card" id="start" aria-label="Inhalt">
+          <div class="hd">
+            <div>
+              <h1>Hochschulbibliothek</h1>
+              <div class="muted">Prototyp-HTML – später an ein LLM koppelbar (Chat rechts).</div>
+            </div>
+            <span class="pill">Demo</span>
+          </div>
+
+          <div class="bd">
+            <div class="alert" role="note">
+              <b>Hinweis</b><br/>
+              Hier kannst du Infos/Module nachbilden. Die Box eignet sich für Schließzeiten, News o. ä.
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 id="kontakt">Kontakt</h2>
+            <p class="muted">Beispielhafte Standortkarten (verlinkbar).</p>
+
+            <div class="contacts" aria-label="Standorte">
+              <div class="contact">
+                <b>Kaiserslautern</b>
+                <a href="tel:+4963110000">Tel</a>
+                <a href="mailto:bibliothek@beispiel.de">E-Mail</a>
+              </div>
+              <div class="contact">
+                <b>Zweibrücken</b>
+                <a href="tel:+4963320000">Tel</a>
+                <a href="mailto:bibliothek@beispiel.de">E-Mail</a>
+              </div>
+              <div class="contact">
+                <b>Pirmasens</b>
+                <a href="tel:+4963310000">Tel</a>
+                <a href="mailto:bibliothek@beispiel.de">E-Mail</a>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2>Direkt-Zugriff</h2>
+            <div class="quicklinks" aria-label="Schnellzugriff">
+              <a href="#" data-action="open" data-target="discovery">Discovery-System</a>
+              <a href="#" data-action="open" data-target="emedien">eMedien</a>
+              <a href="#" data-action="open" data-target="fernleihe">Fernleihe</a>
+              <a href="#" data-action="open" data-target="datenbanken">Datenbanken</a>
+              <a href="#" data-action="open" data-target="citavi">Citavi</a>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 id="services">Services</h2>
+            <div class="tiles">
+              <article class="tile" id="discovery">
+                <div class="title">Discovery-System</div>
+                <div class="desc">Suchen, finden, vormerken – Demo-Kachel.</div>
+                <button type="button" data-action="ask" data-prompt="Ich möchte nach einem Buch suchen. Wie gehe ich vor?">
+                  Mit LLM fragen
+                </button>
+              </article>
+
+              <article class="tile" id="emedien">
+                <div class="title">eMedien</div>
+                <div class="desc">E-Books, E-Journals, Streaming – Demo.</div>
+                <button type="button" data-action="ask" data-prompt="Wie kann ich E-Books von zuhause nutzen?">
+                  Mit LLM fragen
+                </button>
+              </article>
+
+              <article class="tile" id="fernleihe">
+                <div class="title">Fernleihe</div>
+                <div class="desc">Medien aus anderen Bibliotheken bestellen.</div>
+                <button type="button" data-action="ask" data-prompt="Wie funktioniert die Fernleihe und was kostet sie?">
+                  Mit LLM fragen
+                </button>
+              </article>
+
+              <article class="tile" id="datenbanken">
+                <div class="title">Lizenzierte Datenbanken</div>
+                <div class="desc">Fachspezifische Recherche – Demo.</div>
+                <button type="button" data-action="ask" data-prompt="Welche Datenbanken sind für Informatik hilfreich?">
+                  Mit LLM fragen
+                </button>
+              </article>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 id="aktuelles">Aktuelles</h2>
+            <ul>
+              <li><a href="#" data-action="noop">News-Beitrag 1 (Demo)</a></li>
+              <li><a href="#" data-action="noop">News-Beitrag 2 (Demo)</a></li>
+              <li><a href="#" data-action="noop">News-Beitrag 3 (Demo)</a></li>
+            </ul>
+
+            <footer>
+              © Prototyp · Impressum · Datenschutz (Demo)
+            </footer>
+          </div>
+        </section>
+
+        <!-- RIGHT: LLM chat -->
+        <aside class="card chat" aria-label="LLM Panel">
+          <div class="hd">
+            <div>
+              <h2 style="margin-bottom:4px;">LLM-Assistent</h2>
+              <div class="muted" style="font-size:13px;">Frontend-Hook via <code>/api/llm</code> (anpassen).</div>
+            </div>
+            <span class="pill">Chat</span>
+          </div>
+
+          <div class="bd">
+            <div class="chatlog" id="chatlog" aria-live="polite"></div>
+
+            <div class="composer">
+              <label class="sr-only" for="msg">Nachricht</label>
+              <textarea id="msg" placeholder="Frag etwas zur Bibliothek …"></textarea>
+              <button id="sendBtn" type="button">Senden</button>
+            </div>
+
+            <div class="muted" style="font-size:12px;">
+              Tipp: Buttons in den Kacheln senden vorbereitete Prompts an dein LLM.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // --------- Mini Router (scroll) ----------
+    document.querySelectorAll('nav a[data-section]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const id = a.getAttribute('data-section');
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+
+    // --------- Search demo ----------
+    document.getElementById('siteSearch').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = document.getElementById('q').value.trim();
+      if(!q) return;
+      appendMsg('user', `Suche: ${q}`);
+      appendMsg('ai', `Demo: Ich würde jetzt Ergebnisse zu „${q}“ anzeigen.`);
+      document.getElementById('q').value = '';
+    });
+
+    // --------- Chat / LLM wiring ----------
+    const chatlog = document.getElementById('chatlog');
+    const msgInput = document.getElementById('msg');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function appendMsg(role, text){
+      const div = document.createElement('div');
+      div.className = `msg ${role}`;
+      div.textContent = text;
+      chatlog.appendChild(div);
+      chatlog.scrollTop = chatlog.scrollHeight;
+    }
+
+    async function callLLM(userText){
+      // HIER ANPASSEN:
+      
+  const res = await fetch("http://localhost:8080/api/llm", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: userText })
+  });
+
+  if(!res.ok){
+    const t = await res.text();
+    throw new Error(`Backend error ${res.status}: ${t}`);
+  }
+
+  const data = await res.json();
+  return data.reply ?? "";
+      
+    }
+
+    async function sendMessage(text){
+      const t = (text ?? msgInput.value).trim();
+      if(!t) return;
+      appendMsg('user', t);
+      msgInput.value = '';
+      sendBtn.disabled = true;
+
+      try{
+        const reply = await callLLM(t);
+        appendMsg('ai', reply);
+      }catch(err){
+        appendMsg('ai', 'Fehler beim LLM-Call. Prüfe Konsole/Endpoint.');
+        console.error(err);
+      }finally{
+        sendBtn.disabled = false;
+        msgInput.focus();
+      }
+    }
+
+    sendBtn.addEventListener('click', () => sendMessage());
+    msgInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // --------- Tile buttons -> send prepared prompts ----------
+    document.body.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-action]');
+      if(!el) return;
+      const action = el.getAttribute('data-action');
+
+      if(action === 'ask'){
+        const p = el.getAttribute('data-prompt') || 'Erkläre mir das.';
+        sendMessage(p);
+      }
+      if(action === 'open'){
+        e.preventDefault();
+        const target = el.getAttribute('data-target');
+        const section = document.getElementById(target);
+        if(section) section.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+      if(action === 'noop'){
+        e.preventDefault();
+        appendMsg('ai','Demo: Dieser Link ist im Prototyp noch nicht verdrahtet.');
+      }
+    });
+
+    // Startmessage
+    appendMsg('ai', 'Hi! Frag mich etwas zur Ausleihe der Bibliothek.');
+  </script>
+</body>
+</html>
