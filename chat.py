@@ -5,6 +5,21 @@ import requests
 import chromadb
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
+import re
+
+def _tokens(text: str) -> set[str]:
+    text = text.lower()
+    text = re.sub(r"[^a-z0-9äöüß]+", " ", text)
+    toks = [t for t in text.split() if len(t) >= 3]
+    return set(toks)
+
+def lexical_overlap_score(question: str, doc: str) -> float:
+    q = _tokens(question)
+    d = _tokens(doc)
+    if not q or not d:
+        return 0.0
+    return len(q & d) / len(q)
+
 
 def detect_language(text: str) -> str:
     """
@@ -33,12 +48,12 @@ COLLECTION_NAME = "bib"
 
 # 🔁 Werte an Provider anpassen
 API_URL = "http://localhost:11434/api/chat"  # Beispiel-Endpunkt
-MODEL_NAME = "llama3"  # z.B. SauerkrautLM / Llama 3.1 70B Instruct/llama3
+MODEL_NAME = "llama3"  # z.B. SauerkrautLM / Llama-3.1-SauerkrautLM-70b-Instruct /llama3
 
 
 def load_collection():
     embed_fn = SentenceTransformerEmbeddingFunction(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
+        model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
     )
     client = chromadb.PersistentClient(path=CHROMA_DIR)
     collection = client.get_collection(
@@ -48,198 +63,130 @@ def load_collection():
     return collection
 
 
-def retrieve_context(collection, question: str, k: int = 8):
-    """Holt die wichtigsten Textstellen aus dem RAG und filtert nach Themen."""
+def expand_query(question: str) -> str:
+    q = question.lower()
+    # DE/EN: "how long can I borrow" / "wie lange darf ich ausleihen"
+    if ("wie lange" in q and ("ausleihen" in q or "leihfrist" in q or "bücher" in q)) or \
+       ("how long" in q and ("borrow" in q or "loan" in q or "books" in q)):
+        return question + " § 10 Ortsleihe Leihfrist drei Wochen"
+    return question
 
+
+def retrieve_context(
+    collection,
+    question: str,
+    k: int = 12,
+    max_distance: float = 0.85,
+    final_k: int = 5,
+):
     result = collection.query(
         query_texts=[question],
         n_results=k,
+        include=["documents", "metadatas", "distances"],
     )
 
     docs = result["documents"][0]
     metas = result["metadatas"][0]
-    docs_metas = list(zip(docs, metas))
+    dists = result.get("distances", [[]])[0]
 
-    # THEMEN-ERKENNUNG  -------------------------------------------
-    q = question.lower()
+    candidates = []
+    for doc, meta, dist in zip(docs, metas, dists):
+        if dist is not None and dist > max_distance:
+            continue
 
-    thema_ausleihe = ["ausleihe", "ausleihen", "leihfrist", "verlängern", "verlängerung", "medien", "bücher", "buch", "fernleihe", 
-    "mitarbeiter", "student", "wie viele"]
-    thema_gebuehren = ["gebühr", "säumnis", "mahnung", "müssen zahlen","kosten", "wie viel"]
-    thema_oeffnungszeiten = ["geöffnet", "öffnungszeiten", "wann", "zweibrücken", "kaiserslautern", "pirmasens", "standort"]
-    thema_bank = ["bankverbindung", "iban", "überweisung","zu spät", "zahlen", "konto"]
-    thema_online = ["search", "ebooks", "online", "journal", "zugriff", "from home"]
+        sem = 1.0 - float(dist) if dist is not None else 0.0
+        lex = lexical_overlap_score(question, doc)
 
-    if any(w in q for w in thema_ausleihe):
-        keywords = ["leihfrist", "wochen", "verlängern", "ausleihe", "medien", "ausleihen", "fernleihe", "bücher", "buch",  "mitarbeiter", "student", "ich", "wie viele"]
-    elif any(w in q for w in thema_gebuehren):
-        keywords = ["gebühr", "säumnis", "mahnung", "zahlen", "kosten", "müssen", "wie viel"]
-    elif any(w in q for w in thema_oeffnungszeiten):
-        keywords = ["öffnungszeiten", "geöffnet", "bibliothek", "standort", "kaiserslautern", "zweibrücken", "pirmasens", "wann"]
-    elif any(w in q for w in thema_bank):
-        keywords = ["iban", "konto", "bank", "überweisung", "zahlen", "bankverbindung", "zu spät"]
-    elif any(w in q for w in thema_online):
-        keywords = ["online", "katalog", "zugriff", "discovery", "e-book"]
-    else:
-        keywords = []
+        # Semantik ist wichtiger, Lexical ist nur der "Rerank-Feinschliff"
+        score = 0.75 * sem + 0.25 * lex
+        candidates.append((score, doc, meta, dist, sem, lex))
 
-    # Filter anwenden --------------------------------------------------
-    if keywords:
-        filtered = []
-        for doc, meta in docs_metas:
-            text = doc.lower()
-            if any(kw in text for kw in keywords):
-                filtered.append((doc, meta))
+    if not candidates:
+        return "", []
 
-        if filtered:
-            docs_metas = filtered
+    candidates.sort(key=lambda x: x[0], reverse=True)
+    selected = candidates[:final_k]
+    # Debug-Ausgabe der Top-Kandidaten
+    print("Top selected:")
+    for s in selected[:3]:
+        score, _, meta, dist, sem, lex = s
+        print("score", score, "dist", dist, "sem", sem, "lex", lex, "section", meta.get("section"), "page", meta.get("page"))
 
-    # Kontext zusammenbauen -------------------------------------------
+
     blocks = []
-    for i, (doc, meta) in enumerate(docs_metas, start=1):
+    kept = []
+    for i, (score, doc, meta, dist, sem, lex) in enumerate(selected, start=1):
         title = meta.get("title", "Quelle")
         source = meta.get("source", "")
-        block = f"[{i}] {title} ({source})\n{doc}"
-        blocks.append(block)
+        page = meta.get("page")
+        section = meta.get("section")
 
-    return "\n\n---\n\n".join(blocks), docs_metas
+        extra = []
+        if page is not None:
+            extra.append(f"Seite {page}")
+        if section:
+            extra.append(section)
+
+        extra_str = ("; " + ", ".join(extra)) if extra else ""
+        blocks.append(f"[{i}] {title} ({source}{extra_str})\n{doc.strip()}")
+
+        kept.append((doc, meta, dist, score, sem, lex))
+
+    return "\n\n---\n\n".join(blocks), kept
+
+
 
 
 def call_llm(question: str, context: str) -> str:
-    """Ruft das LLM über Ollama auf und antwortet je nach Sprache der Frage nur DE oder nur EN."""
 
-    lang = detect_language(question)
-
-    if lang == "en":
-        # ✅ ENGLISCHE ANTWORT
-        system_prompt = textwrap.dedent("""
-            You are a university library assistant.
-            You answer questions about the library (loan periods, renewals, opening hours,
-            fees, bank details, online catalog, etc.).
-
-            RULES:
-            - Use ONLY the information from the provided context.
-            - Do NOT invent facts or links.
-            - Answer ONLY in English.
-            - If the answer is not clearly contained in the context, say so explicitly
-              and refer the user to the library staff.
-            - You may use the official catalog and library links if relevant.
-        """)
-
-        user_prompt = f"""
-        Question from a person:
-        {question}
-
-        Relevant context from library documents:
-        {context}
-
-        Task:
-        - Read the context carefully.
-        - Answer the question ONLY using information from this context.
-        - If the context does not contain a reliable answer, say that it cannot be answered
-          reliably and suggest contacting the library.
-
-        Answer format (English only):
-
-        Short answer:
-        - 1–2 bullet points with the key information.
-
-        Details:
-        - 2–4 short sentences with important details from the context.
-        - Do not invent information.
-
-        Links (if relevant):
-         -  eMedien: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/emedien
-
-        -   Online-Catalog: https://hbz-hkl.primo.exlibrisgroup.com/discovery/search?vid=49HBZ_HKL:VU1
-
-        -   interlibrary loan: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/fernleihe
-
-        -   Opening hours-Kaiserlautern: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-kaiserslautern
-
-        -   Opening hours-Zweibrücken: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-zweibruecken
-
-        -   Opening hours-Pirmasens: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-pirmasens
-
-        Sources:
-        - e.g. Sources: [1], [3]
-        """ 
-
-    else:
-        # ✅ DEUTSCHE ANTWORT
-        system_prompt = textwrap.dedent("""
-            Du bist ein Bibliotheksassistent an einer Hochschule.
-            Du beantwortest Fragen zur Bibliothek (Ausleihe, Verlängerung, Öffnungszeiten,
-            Gebühren, Bankverbindung, Online-Katalog usw.).
-
-            REGELN:
-            - Nutze AUSSCHLIESSLICH die Informationen aus dem bereitgestellten Kontext.
-            - Erfinde KEINE Fakten und KEINE zusätzlichen Links.
-            - Antworte NUR auf Deutsch.
-            - Wenn die Frage im Kontext nicht sicher beantwortet werden kann,
-              sage das klar und verweise auf die Bibliothek.
-            - Du darfst offizielle Links zur Bibliothek nennen, wenn sie zur Frage passen.
-        """)
-
-        user_prompt = f"""
-        Frage einer Person:
-        {question}
-
-        Relevante Auszüge aus Bibliotheksdokumenten:
-        {context}
-
-        Aufgabe:
-        - Lies den Kontext sorgfältig.
-        - Beantworte die Frage NUR mit Informationen aus diesem Kontext.
-        - Wenn keine sichere Antwort möglich ist, schreibe das ausdrücklich
-          und schlage vor, sich direkt an die Bibliothek zu wenden.
-
-        Antwortformat (nur Deutsch):
-
-        Kurzantwort:
-        - 1–2 Stichpunkte mit der wichtigsten Information.
-
-        Details:
-        - 2–4 kurze Sätze mit den wichtigsten Details aus dem Kontext.
-        - Keine erfundenen Informationen.
-
-        Links:
-        -   eMedien: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/emedien
-
-        -   Online-Catalog: https://hbz-hkl.primo.exlibrisgroup.com/discovery/search?vid=49HBZ_HKL:VU1
-
-        -   Fernleihe: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/fernleihe
-
-        -   Öffnungszeiten-Standort-Kaiserlautern: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-kaiserslautern
-
-        -   Öffnungszeiten-Standort-Zweibrücken: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-zweibruecken
-
-        -   Öffnungszeiten-Standort-Pirmasens: https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-pirmasens
-    
+    lang = detect_language(question) # "de" oder "en"
+    if lang == "de":
+        language_header = "Antworte ausschließlich auf Deutsch."
+    else: 
+        language_header = "Answer exclusively in English."
 
 
+    system_prompt = textwrap.dedent("""
+        You are a precise university library assistant.
 
-        Quellen:
-        - z.B.: Quellen: [1], [3]
-        """
+        RULES:
+        - Use ONLY the information from the provided context.
+        - Do NOT invent facts, numbers, or rules.
+        - Every important factual statement MUST include a source tag like [1], [2], ...
+        - Answer in the SAME language as the user's question (German or English).
+        - The context may be in German. If the question is English, translate the supported facts into English.
+        - If the answer is not clearly supported by the context, say so clearly in the user's language.
+    """)
 
-    headers = {
-        "Content-Type": "application/json",
-    }
+    user_prompt = f"""
+    {language_header}
 
+    KONTEXT/CONTEXT:
+    {context}
+
+    FRAGE/QUESTION:
+    {question}
+
+    AUSGABE/OUTPUT:
+    - First: short direct answer (1–2 sentences).
+    - Then: 1–3 short details if helpful.
+    - End with: Sources: [1], [2]
+    """
+
+    headers = {"Content-Type": "application/json"}
     body = {
         "model": MODEL_NAME,
         "messages": [
             {"role": "system", "content": system_prompt.strip()},
-            {"role": "user",   "content": user_prompt.strip()},
+            {"role": "user", "content": user_prompt.strip()},
         ],
         "stream": False,
     }
 
     resp = requests.post(API_URL, headers=headers, json=body, timeout=120)
     resp.raise_for_status()
-    data = resp.json()
-    return data["message"]["content"]
+    return resp.json()["message"]["content"]
+
 
 
 
