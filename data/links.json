@@ -1,0 +1,100 @@
+[
+  {
+    "id": "opening_hours_zweibruecken",
+    "title_de": "Öffnungszeiten Zweibrücken",
+    "title_en": "Opening hours Zweibrücken",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-zweibruecken",
+    "keywords": ["öffnungszeiten", "zweibrücken", "zweibruecken", "opening hours"]
+  },
+  {
+    "id": "opening_hours_kaiserslautern",
+    "title_de": "Öffnungszeiten Kaiserslautern",
+    "title_en": "Opening hours Kaiserslautern",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-kaiserslautern",
+    "keywords": ["öffnungszeiten", "kaiserslautern", "opening hours"]
+  },
+  {
+    "id": "opening_hours_pirmasens",
+    "title_de": "Öffnungszeiten Pirmasens",
+    "title_en": "Opening hours Pirmasens",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/kontakt-oeffnungszeiten-pirmasens",
+    "keywords": ["öffnungszeiten", "pirmasens", "opening hours"]
+  },
+  {
+    "id": "citavi",
+    "title_de": "Citavi",
+    "title_en": "Citavi",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/citavi/",
+    "keywords": ["citavi", "literaturverwaltung"]
+  },
+  {
+    "id": "feedback",
+    "title_de": "Feedback",
+    "title_en": "Feedback",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/feedback#c770",
+    "keywords": ["feedback", "rückmeldung", "beschwerde"]
+  },
+  {
+    "id": "ejournals",
+    "title_de": "E-Journals",
+    "title_en": "E-Journals",
+    "url": "http://rzblx1.uni-regensburg.de/ezeit/fl.phtml?bibid=FHKL",
+    "keywords": ["ejournal", "e-journal", "journals", "zeitschriften"]
+  },
+  {
+    "id": "datenbankensuche",
+    "title_de": "Datenbankensuche",
+    "title_en": "Database Search",
+    "url": "https://dbis.ur.de/FHKL/",
+    "keywords": ["datenbank", "dbis", "database"]
+  },
+  {
+    "id": "discovery",
+    "title_de": "Discovery (Katalog)",
+    "title_en": "Discovery (Catalog)",
+    "url": "https://hbz-hkl.primo.exlibrisgroup.com/discovery/search?vid=49HBZ_HKL:VU1",
+    "keywords": ["discovery", "katalog", "catalog", "suche", "search"]
+  },
+  {
+    "id": "fernleihe",
+    "title_de": "Online-Fernleihe",
+    "title_en": "Online Interlibrary Loan",
+    "url": "https://hs-kl.digibib.net/auth/login",
+    "keywords": ["fernleihe", "interlibrary loan", "ill"]
+  },
+  {
+    "id": "buchscanner",
+    "title_de": "Buchscanner",
+    "title_en": "Book Scanner",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/buchscanner",
+    "keywords": ["scanner", "buchscanner", "scan"]
+  },
+  {
+    "id": "medienboxen",
+    "title_de": "Medienrückgabebox",
+    "title_en": "Media Return Box",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/medien-rueckgabebox",
+    "keywords": ["rückgabe", "medienbox", "return box"]
+  },
+  {
+    "id": "wir_ueber_uns",
+    "title_de": "Wir über uns",
+    "title_en": "About us",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/wir-ueber-uns",
+    "keywords": ["über uns", "about", "team"]
+  },
+  {
+    "id": "bankverbindung",
+    "title_de": "Bankverbindung",
+    "title_en": "Bank Account Information",
+    "url": "https://www.hs-kl.de/hochschule/servicestellen/bibliothek/bankverbindung",
+    "keywords": ["bankverbindung", "bank", "konto", "iban"]
+  },
+  {
+    "id": "exmatrikulation",
+    "title_de": "Exmatrikulation / Studienwechsel",
+    "title_en": "Exmatriculation / Change of Study Program",
+    "url": "https://www.hs-kl.de/studium/studierende/studienangelegenheiten/exmatrikulation-oder-studiengangwechsel",
+    "keywords": ["exmatrikulation", "studienwechsel", "deregistration"]
+  }
+]

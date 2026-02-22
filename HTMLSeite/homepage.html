@@ -463,23 +463,20 @@
     }
 
     async function callLLM(userText){
-      // HIER ANPASSEN:
-      
-  const res = await fetch("http://localhost:8080/api/llm", {
+    const res = await fetch("http://localhost:8080/api/llm", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: userText })
-  });
+    });
 
-  if(!res.ok){
-    const t = await res.text();
-    throw new Error(`Backend error ${res.status}: ${t}`);
-  }
-
-  const data = await res.json();
-  return data.reply ?? "";
-      
+    if(!res.ok){
+      const t = await res.text();
+      throw new Error(`Backend error ${res.status}: ${t}`);
     }
+
+    // ✅ WICHTIG: Jetzt geben wir das ganze JSON zurück (reply + links)
+    return await res.json();
+  }
 
     async function sendMessage(text){
       const t = (text ?? msgInput.value).trim();
@@ -489,8 +486,13 @@
       sendBtn.disabled = true;
 
       try{
-        const reply = await callLLM(t);
-        appendMsg('ai', reply);
+        const data = await callLLM(t);
+        appendMsg("ai", data.reply ?? "");
+
+        if (Array.isArray(data.links) && data.links.length > 0) {
+          const lines = data.links.map(x => `- ${x.title}: ${x.url}`).join("\n");
+          appendMsg("ai", "Links:\n" + lines);
+        }
       }catch(err){
         appendMsg('ai', 'Fehler beim LLM-Call. Prüfe Konsole/Endpoint.');
         console.error(err);
@@ -531,7 +533,7 @@
     });
 
     // Startmessage
-    appendMsg('ai', 'Hi! Frag mich etwas zur Ausleihe der Bibliothek.');
+    appendMsg('ai', 'Hi! Frag mich etwas zur Bibliothek.');
   </script>
 </body>
 </html>

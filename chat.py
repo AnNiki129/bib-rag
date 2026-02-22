@@ -203,7 +203,7 @@ def main():
         if frage.strip().lower() == "exit":
             break
 
-        context, docs_metas = retrieve_context(collection, frage, k=4)
+        context, docs_metas = retrieve_context(collection, frage, k=12)
 
         print("\n📚 (intern) Kontext-Ausschnitte, die ans Modell geschickt werden:\n")
         print(context[:800] + "...\n")

@@ -41,7 +41,7 @@ def main():
 
         # Kontext aus RAG holen
         with st.spinner("Suche relevante Infos..."):
-            context, docs_metas = retrieve_context(collection, frage, k=4)
+            context, docs_metas = retrieve_context(collection, frage, k=12)
 
         # Antwort erzeugen 
         with st.chat_message("assistant"):
